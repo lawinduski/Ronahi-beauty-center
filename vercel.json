@@ -1,5 +1,7 @@
 {
   "functions": {
-    "api/book.js": { "runtime": "nodejs22.x" }
+    "api/book.js": {
+      "maxDuration": 10
+    }
   }
 }
