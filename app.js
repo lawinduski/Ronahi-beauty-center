@@ -49,7 +49,7 @@
     { key: "instagram2", icon: "i-instagram",  label: "ئینستاگرام", sub: "Instagram", num: "2" },
     { key: "facebook",   icon: "i-facebook",   label: "فەیسبووک",   sub: "Facebook" },
     { key: "tiktok",     icon: "i-tiktok",     label: "تیک تۆک",    sub: "TikTok" },
-    { key: "location",   icon: "i-pin",        label: "شوێن",       sub: "Google Maps", location: true }
+    { key: "location",   icon: "i-pin",        label: "جه",       sub: "Google Maps", location: true }
   ];
   function channelUrl(c) { return c.location ? (CFG.maps || hub) : socialUrl(c.key); }
   function channelLabel(c) { return c.num ? c.label + " " + c.num : c.label; }
@@ -116,14 +116,14 @@
     var mapBox = $("#placeMap");
     if (mapBox && CFG.mapEmbed) {
       mapBox.querySelector(".place-pin").hidden = true;
-      mapBox.appendChild(el("iframe", { src: CFG.mapEmbed, loading: "lazy", referrerpolicy: "no-referrer-when-downgrade", title: "شوێنی ناوەند لەسەر نەخشە", allowfullscreen: "" }));
+      mapBox.appendChild(el("iframe", { src: CFG.mapEmbed, loading: "lazy", referrerpolicy: "no-referrer-when-downgrade", title: "جهێ ناڤەندێ ل سەر نەخشەیێ", allowfullscreen: "" }));
     }
 
     // quick contact next to the booking form
     var alt = $("#bookingAlt");
     if (alt) {
       alt.textContent = "";
-      if (CFG.phone) alt.appendChild(el("a", { href: telHref(CFG.phone) }, [icon("i-phone"), document.createTextNode("پەیوەندی بکە")]));
+      if (CFG.phone) alt.appendChild(el("a", { href: telHref(CFG.phone) }, [icon("i-phone"), document.createTextNode("پەیوەندیێ بکە")]));
       if (CFG.whatsapp) alt.appendChild(el("a", { href: waHref(CFG.whatsapp), target: "_blank", rel: "noopener" }, [icon("i-chat"), document.createTextNode("WhatsApp")]));
       if (!alt.children.length) alt.hidden = true;
     }
@@ -191,7 +191,7 @@
     }
 
     if (cats.length > 1) {
-      [{ key: "all", label: "هەموو" }].concat(cats).forEach(function (c) {
+      [{ key: "all", label: "هەمی" }].concat(cats).forEach(function (c) {
         var b = el("button", { type: "button", "class": "filter", "aria-pressed": String(c.key === active), text: c.label });
         b.addEventListener("click", function () {
           active = c.key;
@@ -313,11 +313,11 @@
     });
 
     var RULES = {
-      name:    { test: function (v) { return v.trim().length >= 2; }, msg: "تکایە ناوی تەواوت بنووسە." },
-      phone:   { test: function (v) { var d = toLatinDigits(v).replace(/\D/g, ""); return d.length >= 10 && d.length <= 15; }, msg: "ژمارەی مۆبایلێکی دروست بنووسە، نموونە: 0750 123 4567" },
-      service: { test: function (v) { return !!v; }, msg: "خزمەتگوزارییەک هەڵبژێرە." },
-      date:    { test: function (v) { return !!v && v >= todayLocal(); }, msg: function (v) { return v ? "ڕۆژەکە نابێت لە ڕابردوودا بێت." : "ڕۆژێک هەڵبژێرە."; } },
-      time:    { test: function (v) { return !!v; }, msg: "کاتێک هەڵبژێرە." }
+      name:    { test: function (v) { return v.trim().length >= 2; }, msg: "تکایە ناڤێ خو یێ تەمام بنڤیسە." },
+      phone:   { test: function (v) { var d = toLatinDigits(v).replace(/\D/g, ""); return d.length >= 10 && d.length <= 15; }, msg: "ژمارەکا دروست یا مۆبایلێ بنڤیسە، بۆ نموونە: 0750 123 4567" },
+      service: { test: function (v) { return !!v; }, msg: "خزمەتگوزارییەکێ هەلبژێرە." },
+      date:    { test: function (v) { return !!v && v >= todayLocal(); }, msg: function (v) { return v ? "ڕۆژ نابێت ل ڕابردوویێدا بیت." : "ڕۆژەکێ هەلبژێرە."; } },
+      time:    { test: function (v) { return !!v; }, msg: "دەمەکێ هەلبژێرە." }
     };
 
     function fieldOf(input) { return input && input.closest(".field"); }
@@ -370,22 +370,22 @@
       fetch("/api/book", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })
         .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok, j: j }; }); })
         .then(function (res) {
-          if (!res.ok || !res.j.appointment) throw new Error(res.j.message || "هەڵەیەک ڕوویدا، تکایە دووبارە هەوڵ بدەرەوە.");
+          if (!res.ok || !res.j.appointment) throw new Error(res.j.message || "هەڵەیەک ڕووی دا؛ تکایە جارەکا دی هەوڵ بدە.");
           lastAppointment = res.j.appointment;
           var a = lastAppointment;
           [["appointmentReference", a.reference], ["appointmentName", a.name], ["appointmentPhone", a.phone],
-           ["appointmentService", a.service], ["appointmentBranch", a.branch], ["appointmentDate", a.date], ["appointmentTime", a.time]]
+           ["appointmentService", ({"جوانکاری ڕوو":"جوانکرنا ڕوو", "لێزەر (Laser)":"لێزەر (Laser)", "PRP — ڕوو":"PRP — ڕوو", "PRP — قژ":"PRP — قژ", "پاککردنەوەی دەموچاو":"پاککرنا ڕوو", "خزمەتگوزاریی تر":"خزمەتگوزارییا دی"}[a.service] || a.service)], ["appointmentBranch", a.branch], ["appointmentDate", a.date], ["appointmentTime", a.time]]
             .forEach(function (pair) { var node = $("#" + pair[0]); if (node) node.textContent = pair[1] || "—"; });
           var status = $("#successStatus");
           if (status) status.textContent = a.status === "pending"
-            ? "داواکارییەکەت بە سەرکەوتوویی نێردرا و چاوەڕێی پشتڕاستکردنەوەی خاوەن ناوەندە. ئەمە هێشتا ژوانی پشتڕاستکراوە نییە."
-            : "ژوانەکەت پشتڕاست کراوەتەوە.";
+            ? "داخوازییا تە ب سەرکەفتی هاتە ناردن و چاوەڕێیا پشتڕاستکرنا خاوەن ناڤەندێیە. ئەڤە هێشتا ژڤانا پشتڕاستکری نینە."
+            : "ژڤانا تە هاتە پشتڕاستکرن.";
           form.reset();
           form.hidden = true; success.hidden = false;
           var h = success.querySelector("h3"); h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true });
           success.scrollIntoView({ behavior: "smooth", block: "center" });
         })
-        .catch(function (err) { showError(err && err.message ? err.message : "هەڵەیەک ڕوویدا، تکایە دووبارە هەوڵ بدەرەوە."); })
+        .catch(function (err) { showError(err && err.message ? err.message : "هەڵەیەک ڕووی دا؛ تکایە جارەکا دی هەوڵ بدە."); })
         .then(function () { btn.classList.remove("loading"); btn.disabled = false; });
     });
 
@@ -403,8 +403,8 @@
       var end = new Date(start.getTime() + 30 * 60000);
       var lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Ronahi Beauty Center//Appointment//CKB", "CALSCALE:GREGORIAN", "BEGIN:VEVENT",
         "UID:" + icsEscape(a.reference) + "@ronahi-beauty-center", "DTSTAMP:" + utcStamp(new Date()), "DTSTART:" + utcStamp(start), "DTEND:" + utcStamp(end),
-        "SUMMARY:" + icsEscape("داواکاریی ژوان - " + a.service),
-        "DESCRIPTION:" + icsEscape("ژمارە: " + a.reference + "\nناو: " + a.name + "\nمۆبایل: " + a.phone + "\nتێبینی: چاوەڕێی پشتڕاستکردنەوە"),
+        "SUMMARY:" + icsEscape("داخوازییا ژڤانێ - " + a.service),
+        "DESCRIPTION:" + icsEscape("ژمارە: " + a.reference + "\nناڤ: " + a.name + "\nمۆبایل: " + a.phone + "\nتێبینی: چاوەڕێیا پشتڕاستکرنێ"),
         "LOCATION:" + icsEscape(a.branch), "END:VEVENT", "END:VCALENDAR"];
       var blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
       var url = URL.createObjectURL(blob), link = document.createElement("a");
