@@ -3,7 +3,7 @@ import { randomInt } from "node:crypto";
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
-    return res.status(405).json({ ok: false, message: "تنێ هنارتنا داخوازیێ ڕێپێدایە." });
+    return res.status(405).json({ ok: false, message: "تەنیا ناردنی داواکاری ڕێگەپێدراوە." });
   }
 
   try {
@@ -17,41 +17,41 @@ export default async function handler(req, res) {
     const note = clean(body.note, 1000);
 
     if (!name || name.length < 2 || !phone || !service || !date || !time) {
-      return res.status(400).json({ ok: false, message: "زانیاریێن پێدڤی نە تەمامن." });
+      return res.status(400).json({ ok: false, message: "زانیارییە پێویستەکان تەواو نییە." });
     }
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) {
-      return res.status(400).json({ ok: false, message: "ڕۆژ یان دەمژمێرا سەرەدانێ نینە." });
+      return res.status(400).json({ ok: false, message: "ڕۆژ یان کاتی ژوان دروست نییە." });
     }
     const phoneDigits = phone.replace(/\D/g, "");
     if (phoneDigits.length < 10 || phoneDigits.length > 15) {
-      return res.status(400).json({ ok: false, message: "ژمارا مۆبایلێ دروست نینە." });
+      return res.status(400).json({ ok: false, message: "ژمارەی مۆبایل دروست نییە." });
     }
 
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
     if (!token || !chatId) {
-      return res.status(500).json({ ok: false, message: "سیستەمێ ژڤانان هێشتا نەهاتییە چالاککرن." });
+      return res.status(500).json({ ok: false, message: "سیستەمی ژوان هێشتا چالاک نەکراوە." });
     }
 
     // Short, cryptographically random reference generated server-side.
     // Without persistent storage, a 4-digit code cannot be guaranteed globally unique forever.
     const reference = `APT-${randomInt(1000, 10000)}`;
-    const branch = clean(process.env.RONAHI_BRANCH, 160) || "دهۆک، ڕێکا ڕەزا";
+    const branch = clean(process.env.RONAHI_BRANCH, 160) || "دهۆک، ڕێگای ڕەزا";
     const message = [
       "RONAHI BEAUTY CENTER",
       "",
-      "داخوازیا نوو یا ژڤانی هاتییە (ل هیڤیا پشتڕاستکرنێ یە):",
-      `ژمارا داخوازیێ: ${reference}`,
+      "داواکارییەکی نوێی ژوان هاتووە (چاوەڕێی پشتڕاستکردنەوە):",
+      `ژمارەی داواکاری: ${reference}`,
       "",
-      `ناڤ: ${name}`,
+      `ناو: ${name}`,
       `مۆبایل: ${phone}`,
       `خزمەتگوزاری: ${service}`,
-      `لق / جهـ: ${branch}`,
+      `لق / شوێن: ${branch}`,
       `ڕۆژ: ${date}`,
-      `دەم: ${time}`,
+      `کات: ${time}`,
       `تێبینی: ${note || "—"}`,
       "",
-      "ئەڤە داخوازییە، نە ژڤانێ پشتڕاستکرییە. هیڤییە دگەل کڕیاری پەیوەندیێ بکە."
+      "ئەمە داواکارییە، نەک ژوانی پشتڕاستکراوە. تکایە لەگەڵ کڕیار پەیوەندی بکە."
     ].join("\n");
 
     const tg = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
     });
     const result = await tg.json().catch(() => ({}));
     if (!tg.ok || !result.ok) {
-      return res.status(502).json({ ok: false, message: "هنارتنا داخوازێ سەربکەفتی نەبوو." });
+      return res.status(502).json({ ok: false, message: "ناردنی داواکاری سەرکەوتوو نەبوو." });
     }
 
     return res.status(200).json({
@@ -69,6 +69,6 @@ export default async function handler(req, res) {
       appointment: { reference, status: "pending", name, phone, service, branch, date, time }
     });
   } catch {
-    return res.status(500).json({ ok: false, message: "خەلەتییەک چێبوو، هیڤییە دووبارە بزاڤێ بکەڤە." });
+    return res.status(500).json({ ok: false, message: "هەڵەیەک ڕوویدا، تکایە دووبارە هەوڵ بدەرەوە." });
   }
 }
