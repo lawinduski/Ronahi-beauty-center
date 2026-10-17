@@ -116,7 +116,7 @@
     var mapBox = $("#placeMap");
     if (mapBox && CFG.mapEmbed) {
       mapBox.querySelector(".place-pin").hidden = true;
-      mapBox.appendChild(el("iframe", { src: CFG.mapEmbed, loading: "lazy", referrerpolicy: "no-referrer-when-downgrade", title: "شوێنی ناوەند لەسەر نەخشە", allowfullscreen: "" }));
+      mapBox.appendChild(el("iframe", { src: CFG.mapEmbed, loading: "lazy", referrerpolicy: "no-referrer-when-downgrade", title: "جهێ سەنتەری ل سەر نەخشەیی", allowfullscreen: "" }));
     }
 
     // quick contact next to the booking form
@@ -138,7 +138,7 @@
 
     function setMenu(open) {
       btn.setAttribute("aria-expanded", String(open));
-      btn.setAttribute("aria-label", open ? "داخستنی مینوو" : "کردنەوەی مینوو");
+      btn.setAttribute("aria-label", open ? "داخستنا مینوی" : "ڤەکرنا مینوی");
       drawer.hidden = !open;
     }
     btn.addEventListener("click", function () { setMenu(btn.getAttribute("aria-expanded") !== "true"); });
@@ -163,7 +163,7 @@
 
     if (!items.length) {
       // ready-made placeholders until real photos are added in config.js
-      var names = ["جوانکاری ڕوو", "لێزەر", "PRP", "HIFU", "پاککردنەوەی ڕوو", "CO₂ Laser"];
+      var names = ["جوانکارییا ڕوخساری", "لێزەر", "PRP", "HIFU", "پاقژکرنا ڕوخساری", "CO₂ Laser"];
       names.forEach(function (n) {
         grid.appendChild(el("div", { "class": "shot shot--ph" }, [icon("i-image"), el("b", { text: n }), el("small", { text: "وێنەکان بەم زووانە" })]));
       });
@@ -180,9 +180,9 @@
       grid.textContent = "";
       shown = items.filter(function (g) { return active === "all" || g.category === active; });
       shown.forEach(function (g, idx) {
-        var alt = g.title || catLabel(g.category) || "وێنەی کار";
+        var alt = g.title || catLabel(g.category) || "وێنێ کاری";
         var img = el("img", { src: g.src, alt: alt, loading: "lazy", decoding: "async" });
-        var btn = el("button", { type: "button", "class": "shot", "aria-label": "کردنەوەی وێنە: " + alt }, [img]);
+        var btn = el("button", { type: "button", "class": "shot", "aria-label": "ڤەکرنا وێنەی: " + alt }, [img]);
         if (g.title) btn.appendChild(el("span", { "class": "shot-cap", text: g.title }));
         img.addEventListener("error", function () { btn.remove(); });
         btn.addEventListener("click", function () { if (window.openLightbox) window.openLightbox(idx); });
@@ -191,7 +191,7 @@
     }
 
     if (cats.length > 1) {
-      [{ key: "all", label: "هەموو" }].concat(cats).forEach(function (c) {
+      [{ key: "all", label: "هەمی" }].concat(cats).forEach(function (c) {
         var b = el("button", { type: "button", "class": "filter", "aria-pressed": String(c.key === active), text: c.label });
         b.addEventListener("click", function () {
           active = c.key;
@@ -215,7 +215,7 @@
       current = (i + shown.length) % shown.length;
       var g = shown[current];
       img.src = g.src;
-      img.alt = g.title || catLabel(g.category) || "وێنەی کار";
+      img.alt = g.title || catLabel(g.category) || "وێنێ کاری";
       cap.textContent = g.title || "";
       box.classList.toggle("single", shown.length < 2);
     }
@@ -257,12 +257,12 @@
 
     before.src = cfg.before;
     after.src = cfg.after;
-    before.alt = cfg.beforeAlt || cfg.beforeLabel || "پێش";
-    after.alt = cfg.afterAlt || cfg.afterLabel || "دوای";
+    before.alt = cfg.beforeAlt || cfg.beforeLabel || "بەری";
+    after.alt = cfg.afterAlt || cfg.afterLabel || "پشتی";
     if (title && cfg.title) title.textContent = cfg.title;
     if (description && cfg.description) description.textContent = cfg.description;
-    if (beforeLabel) beforeLabel.textContent = cfg.beforeLabel || "پێش";
-    if (afterLabel) afterLabel.textContent = cfg.afterLabel || "دوای";
+    if (beforeLabel) beforeLabel.textContent = cfg.beforeLabel || "بەری";
+    if (afterLabel) afterLabel.textContent = cfg.afterLabel || "پشتی";
     if (caption) {
       caption.textContent = cfg.caption || "";
       caption.hidden = !cfg.caption;
@@ -313,11 +313,11 @@
     });
 
     var RULES = {
-      name:    { test: function (v) { return v.trim().length >= 2; }, msg: "تکایە ناوی تەواوت بنووسە." },
-      phone:   { test: function (v) { var d = toLatinDigits(v).replace(/\D/g, ""); return d.length >= 10 && d.length <= 15; }, msg: "ژمارەی مۆبایلێکی دروست بنووسە، نموونە: 0750 123 4567" },
-      service: { test: function (v) { return !!v; }, msg: "خزمەتگوزارییەک هەڵبژێرە." },
-      date:    { test: function (v) { return !!v && v >= todayLocal(); }, msg: function (v) { return v ? "ڕۆژەکە نابێت لە ڕابردوودا بێت." : "ڕۆژێک هەڵبژێرە."; } },
-      time:    { test: function (v) { return !!v; }, msg: "کاتێک هەڵبژێرە." }
+      name:    { test: function (v) { return v.trim().length >= 2; }, msg: "هیڤییە ناڤێ خۆ یێ تەمام بنڤیسە." },
+      phone:   { test: function (v) { var d = toLatinDigits(v).replace(/\D/g, ""); return d.length >= 10 && d.length <= 15; }, msg: "ژمارەکا مۆبایلێ یا دروست بنڤیسە، نموونە: 0750 123 4567"" },
+      service: { test: function (v) { return !!v; }, msg: "خزمەتگوزارییەکێ هەلبژێرە." },
+      date:    { test: function (v) { return !!v && v >= todayLocal(); }, msg: function (v) { return v ? "ڕۆژ نەشێت د بۆرییێ دا بیت." : "ڕۆژەکێ هەلبژێرە."; } },
+      time:    { test: function (v) { return !!v; }, msg: "دەمەکێ هەلبژێرە." }
     };
 
     function fieldOf(input) { return input && input.closest(".field"); }
@@ -378,14 +378,13 @@
             .forEach(function (pair) { var node = $("#" + pair[0]); if (node) node.textContent = pair[1] || "—"; });
           var status = $("#successStatus");
           if (status) status.textContent = a.status === "pending"
-            ? "داواکارییەکەت بە سەرکەوتوویی نێردرا و چاوەڕێی پشتڕاستکردنەوەی خاوەن ناوەندە. ئەمە هێشتا ژوانی پشتڕاستکراوە نییە."
-            : "ژوانەکەت پشتڕاست کراوەتەوە.";
+            ? "داخوازییا تە ب سەرکەفتیانە هاتە فرێکرن و ل هیڤییا پشتڕاستکرنا خودانێ سەنتەری یە. ئەڤە هێشتا ژڤانێ پشتڕاستکری نینە." : "ژڤانێ تە هاتە پشتڕاستکرن.";
           form.reset();
           form.hidden = true; success.hidden = false;
           var h = success.querySelector("h3"); h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true });
           success.scrollIntoView({ behavior: "smooth", block: "center" });
         })
-        .catch(function (err) { showError(err && err.message ? err.message : "هەڵەیەک ڕوویدا، تکایە دووبارە هەوڵ بدەرەوە."); })
+        .catch(function (err) { showError(err && err.message ? err.message : "خەلەتییەک چێبوو، هیڤییە دووبارە بزاڤێ بکەڤە."); })
         .then(function () { btn.classList.remove("loading"); btn.disabled = false; });
     });
 
@@ -403,8 +402,8 @@
       var end = new Date(start.getTime() + 30 * 60000);
       var lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Ronahi Beauty Center//Appointment//CKB", "CALSCALE:GREGORIAN", "BEGIN:VEVENT",
         "UID:" + icsEscape(a.reference) + "@ronahi-beauty-center", "DTSTAMP:" + utcStamp(new Date()), "DTSTART:" + utcStamp(start), "DTEND:" + utcStamp(end),
-        "SUMMARY:" + icsEscape("داواکاریی ژوان - " + a.service),
-        "DESCRIPTION:" + icsEscape("ژمارە: " + a.reference + "\nناو: " + a.name + "\nمۆبایل: " + a.phone + "\nتێبینی: چاوەڕێی پشتڕاستکردنەوە"),
+        "SUMMARY:" + icsEscape("داخوازییا ژڤانی - " + a.service),
+        "DESCRIPTION:" + icsEscape("ژمارە: " + a.reference + "\nناڤ: " + a.name + "\nمۆبایل: " + a.phone + "\nتێبینی: چافەرێی پشتراستکرنێ یە"),
         "LOCATION:" + icsEscape(a.branch), "END:VEVENT", "END:VCALENDAR"];
       var blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
       var url = URL.createObjectURL(blob), link = document.createElement("a");
